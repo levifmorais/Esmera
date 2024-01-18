@@ -1,0 +1,101 @@
+[gd_scene load_steps=10 format=3 uid="uid://d0b5lt1vxeanc"]
+
+[ext_resource type="Script" path="res://Scenes/Entities/Player/PlayerBody.cs" id="1_qelmu"]
+[ext_resource type="Texture2D" uid="uid://dkhivha4e2roa" path="res://Scenes/Entities/Player/PlayerPlaceholderAsset/SpriteSheet/Warrior_Sheet-Effect.png" id="2_45ypg"]
+
+[sub_resource type="Animation" id="Animation_ek3r2"]
+resource_name = "Idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_1uucr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_e3ujs"]
+resource_name = "Walk"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11, 12, 13]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f8j5b"]
+_data = {
+"Idle": SubResource("Animation_ek3r2"),
+"RESET": SubResource("Animation_1uucr"),
+"Walk": SubResource("Animation_e3ujs")
+}
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_rhb3p"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_e2pce"]
+states/StateMachine/node = SubResource("AnimationNodeStateMachine_rhb3p")
+states/StateMachine/position = Vector2(303, 60)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uyxps"]
+radius = 1.1875
+height = 5.50399
+
+[node name="Player" type="Node2D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../PlayerBody")
+libraries = {
+"": SubResource("AnimationLibrary_f8j5b")
+}
+autoplay = "Idle"
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../PlayerBody")
+tree_root = SubResource("AnimationNodeStateMachine_e2pce")
+
+[node name="PlayerBody" type="CharacterBody2D" parent="." node_paths=PackedStringArray("AnimationPlayer", "Sprite")]
+script = ExtResource("1_qelmu")
+AnimationPlayer = NodePath("../AnimationPlayer")
+Sprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerBody"]
+texture_filter = 1
+position = Vector2(5.96046e-08, 0)
+scale = Vector2(0.15625, 0.15625)
+texture = ExtResource("2_45ypg")
+offset = Vector2(6.4, 0)
+hframes = 6
+vframes = 17
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerBody"]
+position = Vector2(-0.195313, 0.586254)
+shape = SubResource("CapsuleShape2D_uyxps")

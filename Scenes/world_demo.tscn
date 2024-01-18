@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://kxo3bh6d8psa"]
+
+[ext_resource type="Texture2D" uid="uid://dsbnivjfr35hq" path="res://icon.svg" id="1_4kwl7"]
+[ext_resource type="PackedScene" uid="uid://d0b5lt1vxeanc" path="res://Scenes/Entities/Player/player.tscn" id="2_aksor"]
+
+[node name="WorldDemo" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+modulate = Color(100, 100, 100, 1)
+position = Vector2(-1.00002, 64)
+scale = Vector2(10.5937, 0.96875)
+texture = ExtResource("1_4kwl7")
+metadata/_edit_group_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(-1.00002, 64)
+scale = Vector2(10.5937, 0.96875)
+polygon = PackedVector2Array(64, -59.6, 64, 59, 59.6, 64, -59, 64, -64, 59.6, -64, -59.6, -59, -63.9, 59, -64)
+
+[node name="Player" parent="." instance=ExtResource("2_aksor")]
+position = Vector2(16, -283)
+
+[node name="PlayerBody" parent="Player" index="2"]
+scale = Vector2(6, 6)
+
+[node name="Camera2D" type="Camera2D" parent="Player/PlayerBody" index="0"]
+zoom = Vector2(3, 3)
+limit_smoothed = true
+position_smoothing_enabled = true
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[editable path="Player"]

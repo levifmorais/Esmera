@@ -4,8 +4,11 @@ namespace Esmera.Scenes.Entities.Player;
 
 public partial class PlayerBody : CharacterBody2D
 {
-    public const float Speed = 300.0f;
-    public const float JumpVelocity = -400.0f;
+    [Export] public float Speed = 300.0f;
+    [Export] public float JumpVelocity = -400.0f;
+
+    public Vector2 Direction;
+    public Vector2 PlayerVelocity;
 
     [Export] public AnimationPlayer AnimationPlayer { get; private set; }
     [Export] public Sprite2D Sprite { get; private set; }
@@ -15,38 +18,73 @@ public partial class PlayerBody : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
-        Vector2 velocity = Velocity;
+        //PlayerVelocity = Velocity;
+
 
         // Add the gravity.
-        if (!IsOnFloor())
-            velocity.Y += Gravity * (float)delta;
+        
+        //if (!IsOnFloor())
+          //  PlayerVelocity.Y += Gravity * (float)delta;
 
         // Handle Jump.
         if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-            velocity.Y = JumpVelocity;
+            PlayerVelocity.Y = JumpVelocity;
+        
+
 
         // Get the input direction and handle the movement/deceleration.
         // As good practice, you should replace UI actions with custom gameplay actions.
-        Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-        if (direction != Vector2.Zero)
+        /*
+        if (Direction != Vector2.Zero)
         {
-            AnimationPlayer.Play("Walk");
-            velocity.X = direction.X * Speed;
+            PlayerVelocity.X = Direction.X * Speed;
         }
         else
         {
-            AnimationPlayer.Play("Idle");
-            velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+            PlayerVelocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
         }
+        */
 
-        Sprite.FlipH = velocity.X switch
+        //SpriteChangeDirection();
+
+        //Velocity = PlayerVelocity;
+
+        //MoveAndSlide();
+    }
+
+    public void GrabCurrentVelocityAndCheckGravity(double delta)
+    {
+        Direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+        
+        PlayerVelocity = Velocity;
+
+        if (!IsOnFloor()) PlayerVelocity.Y += Gravity * (float)delta;
+    }
+
+    public void ApplyPlayerVelocity()
+    {
+        SpriteChangeDirection();
+        Velocity = PlayerVelocity;
+        MoveAndSlide();
+    }
+
+    private void SpriteChangeDirection()
+    {
+        Sprite.FlipH = PlayerVelocity.X switch
         {
-            < 0 => velocity.X < 0,
+            < 0 => PlayerVelocity.X < 0,
             > 0 => false,
             _ => Sprite.FlipH
         };
+    }
 
-        Velocity = velocity;
-        MoveAndSlide();
+    public void Walk()
+    {
+        PlayerVelocity.X = Direction.X * Speed;
+    }
+
+    public void Idle()
+    {
+        PlayerVelocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
     }
 }

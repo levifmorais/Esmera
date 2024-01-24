@@ -20,9 +20,10 @@ scale = Vector2(10.5937, 0.96875)
 polygon = PackedVector2Array(64, -59.6, 64, 59, 59.6, 64, -59, 64, -64, 59.6, -64, -59.6, -59, -63.9, 59, -64)
 
 [node name="Player" parent="." instance=ExtResource("2_aksor")]
-position = Vector2(16, -283)
+position = Vector2(4, -36)
 
 [node name="PlayerBody" parent="Player" index="2"]
+process_physics_priority = 1
 scale = Vector2(6, 6)
 
 [node name="Camera2D" type="Camera2D" parent="Player/PlayerBody" index="0"]

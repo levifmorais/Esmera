@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://d0b5lt1vxeanc"]
+[gd_scene load_steps=11 format=3 uid="uid://d0b5lt1vxeanc"]
 
 [ext_resource type="Script" path="res://Scenes/Entities/Player/PlayerBody.cs" id="1_qelmu"]
+[ext_resource type="Script" path="res://Scenes/Entities/Player/Player.cs" id="1_qir11"]
 [ext_resource type="Texture2D" uid="uid://dkhivha4e2roa" path="res://Scenes/Entities/Player/PlayerPlaceholderAsset/SpriteSheet/Warrior_Sheet-Effect.png" id="2_45ypg"]
 
 [sub_resource type="Animation" id="Animation_ek3r2"]
@@ -69,7 +70,9 @@ states/StateMachine/position = Vector2(303, 60)
 radius = 1.1875
 height = 5.50399
 
-[node name="Player" type="Node2D"]
+[node name="Player" type="Node2D" node_paths=PackedStringArray("PlayerBody")]
+script = ExtResource("1_qir11")
+PlayerBody = NodePath("PlayerBody")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../PlayerBody")
